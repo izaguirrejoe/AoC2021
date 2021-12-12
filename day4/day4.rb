@@ -50,14 +50,40 @@ boards.map! do |board|
   end
 end
 
+#draws.each do |draw|
+#  boards.each do |board|
+#    mark(board, draw)
+#    if check_win(board)
+#      #Find the sum of unmarked numbers
+#      unmarked_sum = board.reduce(0) {|sum, row| sum += row.reject(&:nil?).reduce(:+) }
+#      puts unmarked_sum * draw
+#   end
+#  end
+#end
+
+def print_board(board)
+  board.each {|row| p row }
+end
+
+#Part B
+winners = []
 draws.each do |draw|
   boards.each do |board|
+    next if winners.include?(board)
     mark(board, draw)
     if check_win(board)
-      #Find the sum of unmarked numbers
-      unmarked_sum = board.reduce(0) {|sum, row| sum += row.reject(&:nil?).reduce(:+) }
-      puts unmarked_sum * draw
-      exit
-   end
+      winners << board
+      if winners.size == boards.size
+        puts "Num of Winners #{winners.size}"
+        puts "Draw #{draw}"
+        print_board(board)
+        unmarked_sum = board.reduce(0) {|sum, row| 
+          row_sum = row.reject(&:nil?).reduce(:+)
+          sum += (row_sum || 0)
+        }
+        puts unmarked_sum * draw
+      end
+    end
   end
 end
+
